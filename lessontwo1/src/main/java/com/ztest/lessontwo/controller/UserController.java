@@ -10,6 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+
+/**
+ * Author:shuangxuqi
+ * Date:2019-07-29
+ * Time:18:17
+ * Content:配合jpa数据库操作(第三章)
+ */
 @RestController
 @RequestMapping(value = "/user")
 public class UserController {
