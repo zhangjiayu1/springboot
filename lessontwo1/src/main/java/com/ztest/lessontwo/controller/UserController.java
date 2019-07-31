@@ -18,7 +18,7 @@ import java.util.List;
  * Content:配合jpa数据库操作(第三章)
  */
 @RestController
-@RequestMapping(value = "/user")
+@RequestMapping(value = "/user3")
 public class UserController {
 
     @Autowired

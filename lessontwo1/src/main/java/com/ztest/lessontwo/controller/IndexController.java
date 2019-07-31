@@ -12,9 +12,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * Content:jsp跳转(第二章)
  */
 @Controller
+@RequestMapping(value = "/user")
 public class IndexController {
+    /**
+     * 初始化登录页面
+     * @return
+     */
+    @RequestMapping(value = "/login_view",method = RequestMethod.GET)
+    public String login_view(){
+        return "login";
+    }
+
     @RequestMapping(value = "/index",method = RequestMethod.GET)
-    public String toIndex(){
+    public String index(){
         return "index";
     }
 }

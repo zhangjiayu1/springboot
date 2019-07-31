@@ -1,4 +1,4 @@
-package com.ztest.lessontwo;
+package com.ztest;
 
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;

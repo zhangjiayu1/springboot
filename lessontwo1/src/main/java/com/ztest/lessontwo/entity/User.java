@@ -1,10 +1,11 @@
 package com.ztest.lessontwo.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "t_user")
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +20,9 @@ public class User {
 
     @Column(name = "t_address")
     private String address;
+
+    @Column(name = "t_pwd")
+    private String pwd;
 
     public String getName() {
         return name;
@@ -50,5 +54,13 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getPwd() {
+        return pwd;
+    }
+
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
     }
 }

@@ -1,5 +1,6 @@
-package com.ztest.lessontwo;
+package com.ztest;
 
+import com.ztest.LessontwoApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
