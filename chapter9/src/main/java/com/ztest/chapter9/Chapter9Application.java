@@ -1,13 +1,13 @@
-package com.ztest.chapter8;
+package com.ztest.chapter9;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Chapter8Application {
+public class Chapter9Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(Chapter8Application.class, args);
+        SpringApplication.run(Chapter9Application.class, args);
     }
 
 }

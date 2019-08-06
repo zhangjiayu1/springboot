@@ -1,4 +1,4 @@
-package com.ztest.chapter8;
+package com.ztest;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
