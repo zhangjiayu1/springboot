@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.ztest.chapter8.util.LoggerUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +31,7 @@ public class IndexController {
      * @return
      * @throws Exception
      */
-    @GetMapping(value = "/login")
+    @RequestMapping(value = "/login",method = RequestMethod.GET)
     public JSONObject login(HttpServletRequest request,String name) throws Exception{
         JSONObject obj = new JSONObject();
         obj.put("msg","用户："+name+",登录成功。");
