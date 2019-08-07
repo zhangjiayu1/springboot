@@ -1,4 +1,0 @@
-#屏蔽某个包下不输出日志
-#logging:
-#  level:
-#    com.yuqiyu.chapter12.controller: 'off'
