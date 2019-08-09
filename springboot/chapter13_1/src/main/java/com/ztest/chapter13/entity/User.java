@@ -1,5 +1,6 @@
 package com.ztest.chapter13.entity;
 
+import com.ztest.chapter13.base.BaseEntity;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -14,7 +15,7 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table ( name ="t_user" )
-public class User  implements Serializable {
+public class User extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID =  3442808243958102197L;
 

@@ -27,7 +27,7 @@ public class BaseEntity implements Serializable {
     /**
      * 排序列名称，默认为id
      */
-    protected String sidx = "id";
+    protected String sidx = "tId";
 
     /**
      * 排序正序
