@@ -7,7 +7,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * @Description  t_good_infos瀹炰綋绫籠n * @Author  11568
+ * @Description  t_good_infos
+ * @Author  11568
  * @Date 2019-08-09 
  */
 
