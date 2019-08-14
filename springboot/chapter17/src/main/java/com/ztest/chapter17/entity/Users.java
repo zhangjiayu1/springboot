@@ -36,7 +36,7 @@ public class Users implements Serializable,UserDetails {
 	 * 姓名
 	 */
    	@Column(name = "u_username" )
-	private String uUsername;
+	private String username;
 
 	/**
 	 * 密码
@@ -95,11 +95,11 @@ public class Users implements Serializable,UserDetails {
 	}
 
 	public String getUsername() {
-		return uUsername;
+		return username;
 	}
 
-	public void setUsername(String uUsername) {
-		this.uUsername = uUsername;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getPassword() {
