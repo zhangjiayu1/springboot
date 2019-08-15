@@ -17,8 +17,9 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
  * \* Time: 11:10
  * \* 码云: https://gitee.com/SXQZ/springboot
  * \* To change this template use File | Settings | File Templates.
- * \* Description:
- * \
+ * \* Description:chapter 17 SpringBoot2.0 之后对要求用户保存的密码必须要使用加密算法后存储，在登录验证的时候Security会将获得的密码在进行编码后再和数据库中加密后的密码进行对比，
+ * \*                        所以必须要重写configure(AuthenticationManagerBuilder auth)来指定密码的加密规则
+ * \                         https://blog.csdn.net/zhangjiayu024/article/details/99586380
  */
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
