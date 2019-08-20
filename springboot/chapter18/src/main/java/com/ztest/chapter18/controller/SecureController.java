@@ -1,7 +1,7 @@
 package com.ztest.chapter18.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/secure")
 public class SecureController {
 
-    @GetMapping
+    @RequestMapping(method = RequestMethod.GET)
     public String sayHello(){
         return "Secure Hello!";
     }

@@ -29,7 +29,6 @@ public class Authority  implements Serializable {
 	@Id
 	@NotNull
 	@Size(min = 0,max = 50)
-   	@Column(name = "name" )
 	private String name;
 
 	@Override
