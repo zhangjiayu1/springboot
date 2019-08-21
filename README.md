@@ -7,6 +7,8 @@ chapter1-6已完成  SpringDataJpa Druid FastJson 拦截器
 
 chapter7 JavaMail
 
+test
+
 
 
 学习地址：https://www.jianshu.com/p/9a08417e4e84
