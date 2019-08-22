@@ -16,4 +16,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  */
 public interface UserInfoJPA extends JpaRepository<ApiUserInfos,Long>,
         JpaSpecificationExecutor<ApiUserInfos> {
+    public ApiUserInfos findByAppId(String appId);
 }

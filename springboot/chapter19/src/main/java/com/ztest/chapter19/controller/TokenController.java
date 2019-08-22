@@ -29,7 +29,8 @@ import java.util.concurrent.TimeUnit;
  * \* 码云: https://gitee.com/SXQZ/springboot
  * \* To change this template use File | Settings | File Templates.
  * \* Description:chapter 19 token生成
- * \
+ * \* getOne返回的Optional是Java8中一个可以为null的容器对象，调用.get()方法没有值的话会抛出NoSuchElemwntException异常 所以下文中用getAll().get(0)
+ * \* 获取用户实体与token地方换成了自定义的JPA方法，以免抛出异常
  */
 @RestController
 @RequestMapping(value = "/jwt")
@@ -61,31 +62,19 @@ public class TokenController {
             token.setMsg("appSecret is not found!");
         }else{
             //根据appId查询用户实体
-            ApiUserInfos userDbInfo = userInfoJPA.findOne(new Specification<ApiUserInfos>() {
-                @Override
-                public Predicate toPredicate(Root<ApiUserInfos> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                    criteriaQuery.where(criteriaBuilder.equal(root.get("appId"),appId));
-                    return null;
-                }
-            }).get();
+            ApiUserInfos userDbInfo = userInfoJPA.findByAppId(appId);
             //如果不存在的话
             if(userDbInfo == null){
                 token.setFlag(false);
                 token.setMsg("appId : " + appId + ", is not found");
             }
             //验证appSecret是否存在
-            else if(!new String(userDbInfo.getAuiAppSecret()).equals(appSecret.replace("","+"))){
+            else if(!new String(userDbInfo.getAppSecret()).equals(appSecret.replace(" ","+"))){
                 token.setFlag(false);
                 token.setMsg("appSecret is not effective");
             }else{
                 //检测数据库是否存在该appId的token值
-                ApiTokenInfos tokenDBEntity = tokenJPA.findOne(new Specification<ApiTokenInfos>() {
-                    @Override
-                    public Predicate toPredicate(Root<ApiTokenInfos> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                        criteriaQuery.where(criteriaBuilder.equal(root.get("appId"),appId));
-                        return null;
-                    }
-                }).get();
+                ApiTokenInfos tokenDBEntity = tokenJPA.findByAppId(appId);
                 //返回token值
                 String tokenStr = null;
                 //tokenDBEntity == null -> 生成newTOken -> 保存数据库 -> 写入内存 -> 返回newToken
@@ -94,7 +83,7 @@ public class TokenController {
                     tokenStr = createNewToken(appId);
                     //将token保存到数据库
                     tokenDBEntity = new ApiTokenInfos();
-                    tokenDBEntity.setAtiAppId(userDbInfo.getAuiAppId());
+                    tokenDBEntity.setAppId(userDbInfo.getAppId());
                     tokenDBEntity.setAtiBuildTime(String.valueOf(System.currentTimeMillis()));
                     tokenDBEntity.setAtiToken(tokenStr.getBytes());
                     tokenJPA.save(tokenDBEntity);

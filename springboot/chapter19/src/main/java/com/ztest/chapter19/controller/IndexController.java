@@ -1,5 +1,8 @@
 package com.ztest.chapter19.controller;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 /**
  * \* Created with IntelliJ IDEA.
  * \* User: 11568
@@ -10,5 +13,12 @@ package com.ztest.chapter19.controller;
  * \* Description:
  * \
  */
+@RestController
+@RequestMapping(value = "api")
 public class IndexController {
+
+    @RequestMapping(value = "index")
+    public String index(){
+        return "success";
+    }
 }

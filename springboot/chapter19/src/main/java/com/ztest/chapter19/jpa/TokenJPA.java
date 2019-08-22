@@ -16,4 +16,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  */
 public interface TokenJPA extends JpaRepository<ApiTokenInfos,Long>,
         JpaSpecificationExecutor<ApiTokenInfos> {
+    public ApiTokenInfos findByAppId(String appId);
 }
