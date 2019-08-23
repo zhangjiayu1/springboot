@@ -8,10 +8,17 @@
         <version>2.1.7.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+    <modules>
+        <module>bean</module>
+        <module>user</module>
+        <module>pager</module>
+        <module>bean</module>
+        <module>user</module>
+    </modules>
     <groupId>com.ztest</groupId>
     <artifactId>chapter22</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>pom</packaging>
     <name>chapter22</name>
     <description>Demo project for Spring Boot</description>
 
