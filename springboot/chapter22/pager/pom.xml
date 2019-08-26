@@ -5,8 +5,7 @@
     <parent>
         <groupId>com.ztest</groupId>
         <artifactId>chapter22</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <version>0.0.1-SNAPSHOT</version><!-- lookup parent from repository -->
     </parent>
     <groupId>com.ztest</groupId>
     <artifactId>pager</artifactId>
