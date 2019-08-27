@@ -3,6 +3,7 @@ package com.ztest.chapter25.config;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * \* Created with IntelliJ IDEA.
@@ -15,10 +16,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
  * \
  */
 @Configuration
-public class CORSConfiguration extends WebMvcConfigurationSupport{
+public class CORSConfiguration implements WebMvcConfigurer {
 
     @Override
-    protected void addCorsMappings(CorsRegistry registry) {
+    public void addCorsMappings(CorsRegistry registry) {
         registry
                 //配置可以被跨域的路径，可具体到直接请求路径
                 .addMapping("/**")
