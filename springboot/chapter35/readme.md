@@ -1,0 +1,17 @@
+####MockMvc解析
+
+1 perform方法其实只是为了构建一个请求，并且返回ResultActions实例，该实例则是可以获取到请求的返回内容。
+
+2 MockMvcRequestBuilders该抽象类则是可以构建多种请求方式，如：Post、Get、Put、Delete等常用的请求方式，其中参数则是我们需要请求的本项目的相对路径，/则是项目请求的根路径。
+
+3 param方法用于在发送请求时携带参数，当然除了该方法还有很多其他的方法，大家可以根据实际请求情况选择调用。
+
+4 andReturn方法则是在发送请求后需要获取放回时调用，该方法返回MvcResult对象，该对象可以获取到返回的视图名称、返回的Response状态、获取拦截请求的拦截器集合等。
+
+5 我们在这里就是使用到了第4步内的MvcResult对象实例获取的MockHttpServletResponse对象从而才得到的Status状态码。
+
+6 同样也是使用MvcResult实例获取的MockHttpServletResponse对象从而得到的请求返回的字符串内容。【可以查看rest返回的json数据】
+
+7 使用Junit内部验证类Assert判断返回的状态码是否正常为200
+
+8 判断返回的字符串是否与我们预计的一样。
