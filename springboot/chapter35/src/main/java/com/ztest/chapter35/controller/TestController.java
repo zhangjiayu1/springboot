@@ -4,6 +4,7 @@ import com.ztest.chapter35.bean.GoodInfos;
 import com.ztest.chapter35.jpa.GoodInfoJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -51,6 +52,7 @@ public class TestController {
      * @param goodId
      * @return
      */
+    @RequestMapping(value = "/detail",method = RequestMethod.GET)
     public GoodInfos selectOne(Integer goodId){
         return goodInfoJPA.findById(goodId).orElse(null);
     }

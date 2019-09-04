@@ -98,7 +98,7 @@ public class Chapter35ApplicationTests {
                         //2
                         MockMvcRequestBuilders.get("/detail")
                                 //3
-                        .param("tgId","2")
+                        .param("tg_Id","3")
                 )
                 //4
                 .andReturn();
@@ -135,9 +135,9 @@ public class Chapter35ApplicationTests {
      */
     @Test
     public void testDelete(){
-        goodInfoJPA.deleteById(2);
+        goodInfoJPA.deleteById(1);
 
         //验证
-        Assert.assertNotNull(goodInfoJPA.findById(2));
+        Assert.assertNotNull(goodInfoJPA.findById(1));
     }
 }
