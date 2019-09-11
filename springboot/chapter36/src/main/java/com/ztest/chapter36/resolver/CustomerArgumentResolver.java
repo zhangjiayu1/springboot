@@ -11,10 +11,13 @@ import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.validation.DataBinder;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import org.springframework.web.servlet.HandlerMapping;
 
-import java.util.Map;
+import java.lang.reflect.Field;
+import java.util.*;
 
 
 /**
@@ -61,15 +64,15 @@ public class CustomerArgumentResolver implements HandlerMethodArgumentResolver {
             NativeWebRequest nativeWebRequest,
             WebDataBinderFactory webDataBinderFactory) throws Exception {
 
-        String parammeterName = methodParameter.getParameterName();
-        logger.info("参数名称：{}",parammeterName);
+        String parameterName = methodParameter.getParameterName();
+        logger.info("参数名称：{}",parameterName);
         /**
          * 目标返回对象
          * 如果Model存在该Attribute时从module内获取并设置为返回值
          * 如果Model不存在该Attribute则从request parameterMap内获取并设置为返回值
          */
-        Object target = modelAndViewContainer.containsAttribute(parammeterName) ?
-                modelAndViewContainer.getModel().get(parammeterName) : createAttribute(parammeterName,methodParameter,webDataBinderFactory,nativeWebRequest);
+        Object target = modelAndViewContainer.containsAttribute(parameterName) ?
+                modelAndViewContainer.getModel().get(parameterName) : createAttribute(parameterName,methodParameter,webDataBinderFactory,nativeWebRequest);
         /**
          * 返回内容，这里返回的内容才是最终装载到参数的值
          */
@@ -189,5 +192,134 @@ public class CustomerArgumentResolver implements HandlerMethodArgumentResolver {
             return request.getParameter(attributeName);
         }
         return null;
+    }
+
+    /**
+     * 获取指定前缀的参数：包括uri varaibles 和 parameters
+     * @param namePrefix
+     * @param request
+     * @param subPrefix
+     * @return
+     */
+    protected Map<String,String[]> getPrefixParameterMap(String namePrefix,NativeWebRequest request,boolean subPrefix){
+
+        Map<String,String[]> result = new HashMap<>();
+        /**
+         * 从PathVariables内获取该前缀的参数列表
+         */
+        Map<String,String> variables = getUriTemplateVariables(request);
+        int namePrefixLength = namePrefix.length();
+        for(String name : variables.keySet()){
+            if(name.startsWith(namePrefix)){
+                if(subPrefix){
+                    char ch = name.charAt(namePrefix.length());
+                    //如果下一个字符不是数字 . _ 则不可能是查询 只是前缀类似
+                    if(illegalChar(ch)){
+                        continue;
+                    }
+                    result.put(name.substring(namePrefixLength + 1),new String[]{variables.get(name)});
+                }else {
+                    result.put(name, new String[]{variables.get(name)});
+                }
+            }
+        }
+        /**
+         * 从request parameterMap集合内获取该前缀的参数列表
+         */
+        Iterator<String> parameterNames = request.getParameterNames();
+        while (parameterNames.hasNext()){
+            String name = parameterNames.next();
+            if (name.startsWith(namePrefix)) {
+                //page.pn  则截取 pn
+                if (subPrefix) {
+                    char ch = name.charAt(namePrefix.length());
+                    //如果下一个字符不是 数字 . _  则不可能是查询 只是前缀类似
+                    if (illegalChar(ch)) {
+                        continue;
+                    }
+                    result.put(name.substring(namePrefixLength + 1), request.getParameterValues(name));
+                } else {
+                    result.put(name, request.getParameterValues(name));
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 验证参数前缀是否合法
+     * @param ch
+     * @return
+     */
+    private boolean illegalChar(char ch){
+        return ch != '.' && ch != '_' && !(ch >= '0' && ch <= '9');
+    }
+
+    /**
+     * 获取PathVariables集合
+     * @param request
+     * @return
+     */
+    protected final Map<String,String> getUriTemplateVariables(NativeWebRequest request){
+        Map<String,String> variables =
+                (Map<String,String>) request.getAttribute(
+                        HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE, RequestAttributes.SCOPE_REQUEST
+                );
+        return (variables != null) ? variables : Collections.emptyMap();
+    }
+
+    /**
+     * 从request内获取parameter前缀的所有参数
+     * 并根据parameter的类型将对应字段的值设置到parameter对象内并返回
+     * @param parameter
+     * @param request
+     * @return
+     */
+    protected Object putParameters(MethodParameter parameter,NativeWebRequest request){
+        /**
+         * 根据请求参数类型初始化空对象
+         */
+        Object object = BeanUtils.instantiateClass(parameter.getParameterType());
+        /**
+         * 获取指定前缀的请求参数集合
+         */
+        Map<String,String[]> parameters = getPrefixParameterMap(parameter.getParameterName(),request,true);
+        Iterator<String> iterator = parameters.keySet().iterator();
+        while(iterator.hasNext()){
+            //字段名称
+            String fieldName = iterator.next();
+            //请求参数值
+            String[] parameterValue = parameters.get(fieldName);
+            try{
+                Field field = object.getClass().getDeclaredField(fieldName);
+                field.setAccessible(true);
+
+                //字段的类型
+                Class<?> fieldTargetType = field.getType();
+                /**
+                 * List(ArrayList、LinkedList)类型
+                 * 将数组类型的值转换为List集合对象
+                 */
+                if(List.class.isAssignableFrom(fieldTargetType)){
+                    field.set(object,Arrays.asList(parameterValue));
+                }
+                /**supportsParameter
+                 * Object数组类型，直接将数组值设置为目标字段的值
+                 */
+                else if(Object[].class.isAssignableFrom(fieldTargetType)){
+                    field.set(object,parameterValue);
+                }
+                /**
+                 * 单值时获取数组索引为0的值
+                 */
+                else{
+                    field.set(object,parameterValue[0]);
+                }
+            }catch (Exception e){
+                logger.error("Set Field：{} Value Error，In {}",fieldName,object.getClass().getName());
+                continue;
+            }
+        }
+        return object;
     }
 }
